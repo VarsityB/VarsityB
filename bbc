@@ -134,19 +134,29 @@ end)
 -- Airlock Function
 local function AirLock(Type)
     local player = game.Players.LocalPlayer
-    local character = player.Character
+    local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        local humanoidRootPart = character.HumanoidRootPart
-
-        if Type then
-            -- Move the character upwards
+    if humanoidRootPart then
+        if CmdSettings["AirLock"] == nil and Type == true then
+            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
+            if BP then
+                BP:Destroy()
+            end
             CmdSettings["AirLock"] = true
 
+            -- Adjust the height to 10 studs
             humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 10, 0)
-        else
-            -- Reset the character's position to the ground
-            CmdSettings["AirLock"] = false
+
+            local BP = Instance.new("BodyPosition", humanoidRootPart)
+            BP.Name = "AirLockBP"
+            BP.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            BP.Position = humanoidRootPart.Position
+        elseif CmdSettings["AirLock"] == true and Type == false then
+            CmdSettings["AirLock"] = nil
+            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
+            if BP then
+                BP.Position = humanoidRootPart.Position  -- Set the position instead of destroying
+            end
         end
     end
 end
