@@ -148,8 +148,9 @@ local function AirLock(Type)
             if not bodyVelocity then
                 bodyVelocity = Instance.new("BodyVelocity")
                 bodyVelocity.Name = "AirLockBodyVelocity"
-                bodyVelocity.Velocity = Vector3.new(0, 10, 0)
+                bodyVelocity.Velocity = Vector3.new(0, 10, 0)  -- Adjust the Y component as needed
                 bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                bodyVelocity.P = math.huge  -- Proportional gain, adjust as needed
                 bodyVelocity.Parent = humanoidRootPart
             end
         else
