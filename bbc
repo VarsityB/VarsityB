@@ -134,30 +134,34 @@ end)
 -- Airlock Function
 local function AirLock(Type)
     local player = game.Players.LocalPlayer
-    local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    local character = player.Character
 
-    if humanoidRootPart then
-        if CmdSettings["AirLock"] == nil and Type == true then
-            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
-            if BP then
-                BP:Destroy()
-            end
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local humanoidRootPart = character.HumanoidRootPart
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+        if Type then
+            -- Move the character upwards
             CmdSettings["AirLock"] = true
 
-            -- Adjust the height to 10 studs
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+            local bodyVelocity = humanoidRootPart:FindFirstChild("AirLockBodyVelocity")
+            if not bodyVelocity then
+                bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Name = "AirLockBodyVelocity"
+                bodyVelocity.Velocity = Vector3.new(0, 10, 0)
+                bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                bodyVelocity.Parent = humanoidRootPart
+            end
+        else
+            -- Reset the character's position to the ground
+            CmdSettings["AirLock"] = false
 
-            local BP = Instance.new("BodyPosition", humanoidRootPart)
-            BP.Name = "AirLockBP"
-            BP.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-            BP.Position = humanoidRootPart.Position
-        elseif CmdSettings["AirLock"] == true and Type == false then
-            CmdSettings["AirLock"] = nil
-            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
-            if BP then
-                BP.Position = humanoidRootPart.Position  -- Set the position instead of destroying
+            local bodyVelocity = humanoidRootPart:FindFirstChild("AirLockBodyVelocity")
+            if bodyVelocity then
+                bodyVelocity:Destroy()
             end
         end
     end
 end
+
 
