@@ -137,29 +137,15 @@ local function AirLock(Type)
 
     if character and character:FindFirstChild("HumanoidRootPart") then
         local humanoidRootPart = character.HumanoidRootPart
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
 
         if Type then
             -- Move the character upwards
             CmdSettings["AirLock"] = true
 
-            local bodyPosition = humanoidRootPart:FindFirstChild("AirLockBodyPosition")
-            if not bodyPosition then
-                bodyPosition = Instance.new("BodyPosition")
-                bodyPosition.Name = "AirLockBodyPosition"
-                bodyPosition.Position = humanoidRootPart.Position + Vector3.new(0, 10, 0)  -- Adjust the Y component as needed
-                bodyPosition.MaxForce = Vector3.new(0, math.huge, 0)
-                bodyPosition.P = math.huge  -- Proportional gain, adjust as needed
-                bodyPosition.Parent = humanoidRootPart
-            end
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 10, 0)
         else
             -- Reset the character's position to the ground
             CmdSettings["AirLock"] = false
-
-            local bodyPosition = humanoidRootPart:FindFirstChild("AirLockBodyPosition")
-            if bodyPosition then
-                bodyPosition:Destroy()
-            end
         end
     end
 end
