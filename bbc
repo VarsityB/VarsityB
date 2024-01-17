@@ -142,20 +142,24 @@ local function AirLock(Type)
             -- Float the character in the air
             CmdSettings["AirLock"] = true
 
-            local bodyForce = humanoidRootPart:FindFirstChild("AirLockBodyForce")
-            if not bodyForce then
-                bodyForce = Instance.new("BodyForce")
-                bodyForce.Name = "AirLockBodyForce"
-                bodyForce.Force = Vector3.new(0, 5000, 0) -- Adjust force as needed
-                bodyForce.Parent = humanoidRootPart
+            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
+            if BP then
+                BP:Destroy()
             end
+
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+
+            BP = Instance.new("BodyPosition", humanoidRootPart)
+            BP.Name = "AirLockBP"
+            BP.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            BP.Position = humanoidRootPart.Position
         else
             -- Reset the character's position to the ground
             CmdSettings["AirLock"] = false
 
-            local bodyForce = humanoidRootPart:FindFirstChild("AirLockBodyForce")
-            if bodyForce then
-                bodyForce:Destroy()
+            local BP = humanoidRootPart:FindFirstChild("AirLockBP")
+            if BP then
+                BP:Destroy()
             end
         end
     end
