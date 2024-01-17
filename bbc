@@ -118,7 +118,7 @@ end)
 
 -- Setup
 -- Setup Tab
-local SetupTab = Window:NewTab("Setup")
+local SetupTab = Window:NewTab("bbc")
 local SetupSection = SetupTab:NewSection("Setup Options")
 
 -- Airlock Button
